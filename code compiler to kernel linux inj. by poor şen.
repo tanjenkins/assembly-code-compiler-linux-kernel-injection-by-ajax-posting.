@@ -1,0 +1,36 @@
+global _start
+
+print:
+  push ebp ; push return addr of the bottom of the stack, takes 4 bytes of current memory in stack frame
+  mov ebp, esp ; swap bottom of the stack with the top
+  
+  mov eax, 4 ; write functions index in linux kernel
+  mov ebx, 1 ; file descriptor value for stdout
+  mov ecx, [ebp + 0xC] ; move message buffer to ecx register as pointer ofc.
+  mov edx, [ebp + 0x8] ; move length to the edx register
+  int 0x80 ; make syscall with irq
+
+  mov esp, ebp ; restore stack pointer
+  pop ebp ; pop from the stack
+  ret ; return to ret addr
+
+_start:
+   push message
+   push length
+   call print ; call print function which i've done myself
+  
+   mov eax, 1 ; exit function which was declared in linux's syscall table 
+   mov ebx, -1 ; error code arg
+   int 0x80
+
+ message: db "sigma rule 1, do not program with any other programming language except assembly.", 0xA ; string
+ length: equ $ - message ; length of the string
+
+print:
+push mov eax, 5 ; "canan amcığımı yalican" index in kernel plugin
+push mov eax, 6 ; "anam porselen tabak" index in gammahook.cpp plugin
+
+
+
+Coded by,
+Burak Şen.
